@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MemoryRouteImport } from './routes/memory'
 import { Route as FindingsIndexRouteImport } from './routes/findings/index'
 import { Route as FindingsIdRouteImport } from './routes/findings/$id'
 import { Route as SituationsIndexRouteImport } from './routes/situations/index'
@@ -18,6 +19,11 @@ import { Route as SituationsIdRouteImport } from './routes/situations/$id'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MemoryRoute = MemoryRouteImport.update({
+  id: '/memory',
+  path: '/memory',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FindingsIndexRoute = FindingsIndexRouteImport.update({
@@ -43,6 +49,7 @@ const SituationsIdRoute = SituationsIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/memory': typeof MemoryRoute
   '/findings/$id': typeof FindingsIdRoute
   '/situations/$id': typeof SituationsIdRoute
   '/findings/': typeof FindingsIndexRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/memory': typeof MemoryRoute
   '/findings/$id': typeof FindingsIdRoute
   '/situations/$id': typeof SituationsIdRoute
   '/findings': typeof FindingsIndexRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/memory': typeof MemoryRoute
   '/findings/$id': typeof FindingsIdRoute
   '/situations/$id': typeof SituationsIdRoute
   '/findings/': typeof FindingsIndexRoute
@@ -66,12 +75,24 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/findings/$id' | '/situations/$id' | '/findings/' | '/situations/'
+    | '/'
+    | '/memory'
+    | '/findings/$id'
+    | '/situations/$id'
+    | '/findings/'
+    | '/situations/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/findings/$id' | '/situations/$id' | '/findings' | '/situations'
+  to:
+    | '/'
+    | '/memory'
+    | '/findings/$id'
+    | '/situations/$id'
+    | '/findings'
+    | '/situations'
   id:
     | '__root__'
     | '/'
+    | '/memory'
     | '/findings/$id'
     | '/situations/$id'
     | '/findings/'
@@ -80,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MemoryRoute: typeof MemoryRoute
   FindingsIdRoute: typeof FindingsIdRoute
   SituationsIdRoute: typeof SituationsIdRoute
   FindingsIndexRoute: typeof FindingsIndexRoute
@@ -93,6 +115,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/memory': {
+      id: '/memory'
+      path: '/memory'
+      fullPath: '/memory'
+      preLoaderRoute: typeof MemoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/findings/': {
@@ -128,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MemoryRoute: MemoryRoute,
   FindingsIdRoute: FindingsIdRoute,
   SituationsIdRoute: SituationsIdRoute,
   FindingsIndexRoute: FindingsIndexRoute,
