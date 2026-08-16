@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as MemoryRouteImport } from './routes/memory'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ConnectionsIndexRouteImport } from './routes/connections/index'
 import { Route as ConnectionsProviderRouteImport } from './routes/connections/$provider'
 import { Route as FindingsIndexRouteImport } from './routes/findings/index'
@@ -33,6 +34,11 @@ const HistoryRoute = HistoryRouteImport.update({
 const MemoryRoute = MemoryRouteImport.update({
   id: '/memory',
   path: '/memory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConnectionsIndexRoute = ConnectionsIndexRouteImport.update({
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/history': typeof HistoryRoute
   '/memory': typeof MemoryRoute
+  '/settings': typeof SettingsRoute
   '/connections/$provider': typeof ConnectionsProviderRoute
   '/findings/$id': typeof FindingsIdRoute
   '/situations/$id': typeof SituationsIdRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/history': typeof HistoryRoute
   '/memory': typeof MemoryRoute
+  '/settings': typeof SettingsRoute
   '/connections/$provider': typeof ConnectionsProviderRoute
   '/findings/$id': typeof FindingsIdRoute
   '/situations/$id': typeof SituationsIdRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/history': typeof HistoryRoute
   '/memory': typeof MemoryRoute
+  '/settings': typeof SettingsRoute
   '/connections/$provider': typeof ConnectionsProviderRoute
   '/findings/$id': typeof FindingsIdRoute
   '/situations/$id': typeof SituationsIdRoute
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/history'
     | '/memory'
+    | '/settings'
     | '/connections/$provider'
     | '/findings/$id'
     | '/situations/$id'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/'
     | '/history'
     | '/memory'
+    | '/settings'
     | '/connections/$provider'
     | '/findings/$id'
     | '/situations/$id'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/'
     | '/history'
     | '/memory'
+    | '/settings'
     | '/connections/$provider'
     | '/findings/$id'
     | '/situations/$id'
@@ -151,6 +163,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HistoryRoute: typeof HistoryRoute
   MemoryRoute: typeof MemoryRoute
+  SettingsRoute: typeof SettingsRoute
   ConnectionsProviderRoute: typeof ConnectionsProviderRoute
   FindingsIdRoute: typeof FindingsIdRoute
   SituationsIdRoute: typeof SituationsIdRoute
@@ -181,6 +194,13 @@ declare module '@tanstack/react-router' {
       path: '/memory'
       fullPath: '/memory'
       preLoaderRoute: typeof MemoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/connections/': {
@@ -239,6 +259,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HistoryRoute: HistoryRoute,
   MemoryRoute: MemoryRoute,
+  SettingsRoute: SettingsRoute,
   ConnectionsProviderRoute: ConnectionsProviderRoute,
   FindingsIdRoute: FindingsIdRoute,
   SituationsIdRoute: SituationsIdRoute,
