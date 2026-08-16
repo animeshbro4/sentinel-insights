@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HistoryRouteImport } from './routes/history'
 import { Route as MemoryRouteImport } from './routes/memory'
 import { Route as ConnectionsIndexRouteImport } from './routes/connections/index'
 import { Route as ConnectionsProviderRouteImport } from './routes/connections/$provider'
@@ -22,6 +23,11 @@ import { Route as WorkspaceServiceRouteImport } from './routes/workspace/$servic
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MemoryRoute = MemoryRouteImport.update({
@@ -67,6 +73,7 @@ const WorkspaceServiceRoute = WorkspaceServiceRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
   '/memory': typeof MemoryRoute
   '/connections/$provider': typeof ConnectionsProviderRoute
   '/findings/$id': typeof FindingsIdRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
   '/memory': typeof MemoryRoute
   '/connections/$provider': typeof ConnectionsProviderRoute
   '/findings/$id': typeof FindingsIdRoute
@@ -90,6 +98,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
   '/memory': typeof MemoryRoute
   '/connections/$provider': typeof ConnectionsProviderRoute
   '/findings/$id': typeof FindingsIdRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/history'
     | '/memory'
     | '/connections/$provider'
     | '/findings/$id'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/history'
     | '/memory'
     | '/connections/$provider'
     | '/findings/$id'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/history'
     | '/memory'
     | '/connections/$provider'
     | '/findings/$id'
@@ -137,6 +149,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HistoryRoute: typeof HistoryRoute
   MemoryRoute: typeof MemoryRoute
   ConnectionsProviderRoute: typeof ConnectionsProviderRoute
   FindingsIdRoute: typeof FindingsIdRoute
@@ -154,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/memory': {
@@ -217,6 +237,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HistoryRoute: HistoryRoute,
   MemoryRoute: MemoryRoute,
   ConnectionsProviderRoute: ConnectionsProviderRoute,
   FindingsIdRoute: FindingsIdRoute,
