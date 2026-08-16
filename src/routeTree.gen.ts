@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MemoryRouteImport } from './routes/memory'
+import { Route as ConnectionsIndexRouteImport } from './routes/connections/index'
 import { Route as FindingsIndexRouteImport } from './routes/findings/index'
 import { Route as FindingsIdRouteImport } from './routes/findings/$id'
 import { Route as SituationsIndexRouteImport } from './routes/situations/index'
@@ -25,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
 const MemoryRoute = MemoryRouteImport.update({
   id: '/memory',
   path: '/memory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnectionsIndexRoute = ConnectionsIndexRouteImport.update({
+  id: '/connections/',
+  path: '/connections/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FindingsIndexRoute = FindingsIndexRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/findings/$id': typeof FindingsIdRoute
   '/situations/$id': typeof SituationsIdRoute
   '/workspace/$service': typeof WorkspaceServiceRoute
+  '/connections/': typeof ConnectionsIndexRoute
   '/findings/': typeof FindingsIndexRoute
   '/situations/': typeof SituationsIndexRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/findings/$id': typeof FindingsIdRoute
   '/situations/$id': typeof SituationsIdRoute
   '/workspace/$service': typeof WorkspaceServiceRoute
+  '/connections': typeof ConnectionsIndexRoute
   '/findings': typeof FindingsIndexRoute
   '/situations': typeof SituationsIndexRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/findings/$id': typeof FindingsIdRoute
   '/situations/$id': typeof SituationsIdRoute
   '/workspace/$service': typeof WorkspaceServiceRoute
+  '/connections/': typeof ConnectionsIndexRoute
   '/findings/': typeof FindingsIndexRoute
   '/situations/': typeof SituationsIndexRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/findings/$id'
     | '/situations/$id'
     | '/workspace/$service'
+    | '/connections/'
     | '/findings/'
     | '/situations/'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/findings/$id'
     | '/situations/$id'
     | '/workspace/$service'
+    | '/connections'
     | '/findings'
     | '/situations'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/findings/$id'
     | '/situations/$id'
     | '/workspace/$service'
+    | '/connections/'
     | '/findings/'
     | '/situations/'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   FindingsIdRoute: typeof FindingsIdRoute
   SituationsIdRoute: typeof SituationsIdRoute
   WorkspaceServiceRoute: typeof WorkspaceServiceRoute
+  ConnectionsIndexRoute: typeof ConnectionsIndexRoute
   FindingsIndexRoute: typeof FindingsIndexRoute
   SituationsIndexRoute: typeof SituationsIndexRoute
 }
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/memory'
       fullPath: '/memory'
       preLoaderRoute: typeof MemoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connections/': {
+      id: '/connections/'
+      path: '/connections'
+      fullPath: '/connections/'
+      preLoaderRoute: typeof ConnectionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/findings/': {
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   FindingsIdRoute: FindingsIdRoute,
   SituationsIdRoute: SituationsIdRoute,
   WorkspaceServiceRoute: WorkspaceServiceRoute,
+  ConnectionsIndexRoute: ConnectionsIndexRoute,
   FindingsIndexRoute: FindingsIndexRoute,
   SituationsIndexRoute: SituationsIndexRoute,
 }

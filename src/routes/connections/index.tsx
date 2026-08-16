@@ -41,8 +41,6 @@ const families = [
   },
 ];
 
-export default function noop() {}
-
 function ConnectionsPage() {
   return (
     <div className="max-w-[80ch]">
