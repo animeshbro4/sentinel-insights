@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   findingById,
   memories,
@@ -35,17 +35,22 @@ export const Route = createFileRoute("/situations/$id")({
       ],
     };
   },
-  loader: ({ params }) => {
-    const s = situationById(params.id);
-    if (!s) throw notFound();
-    return s;
-  },
   component: SituationDetail,
 });
 
 function SituationDetail() {
-  const s = Route.useLoaderData();
-  const findings = s.findingIds.map(findingById).filter(Boolean);
+  const { id } = Route.useParams();
+  const s = situationById(id);
+  if (!s) {
+    return (
+      <p className="t-small text-ink-dim">
+        That situation no longer exists. <Link to="/situations">Back to situations</Link>
+      </p>
+    );
+  }
+  const findings = s.findingIds
+    .map(findingById)
+    .filter((f): f is NonNullable<typeof f> => Boolean(f));
   const memory = memories.find((m) => !m.forgotten && s.memory);
 
   return (
@@ -96,28 +101,28 @@ function SituationDetail() {
           <SectionLabel>Findings ({findings.length})</SectionLabel>
           <ul className="mt-3 space-y-2">
             {findings.map((f) => (
-              <Panel as="li" key={f!.id} accent={severityColor[f!.severity]}>
+              <Panel as="li" key={f.id} accent={severityColor[f.severity]}>
                 <div className="t-micro flex items-center gap-2">
-                  <span style={{ color: severityColor[f!.severity] }}>
-                    {severityLabel[f!.severity]}
+                  <span style={{ color: severityColor[f.severity] }}>
+                    {severityLabel[f.severity]}
                   </span>
-                  <span className="text-ink-faint">· {serviceByKey(f!.service)?.name}</span>
+                  <span className="text-ink-faint">· {serviceByKey(f.service)?.name}</span>
                 </div>
                 <Link
                   to="/findings/$id"
-                  params={{ id: f!.id }}
+                  params={{ id: f.id }}
                   className="t-lead mt-1 block text-ink hover:underline"
                 >
-                  {f!.title}
+                  {f.title}
                 </Link>
-                <p className="t-caption mt-1 text-ink-faint">{f!.why}</p>
+                <p className="t-caption mt-1 text-ink-faint">{f.why}</p>
                 <a
-                  href={f!.evidence[0]?.link}
+                  href={f.evidence[0]?.link}
                   target="_blank"
                   rel="noreferrer"
                   className="t-caption mt-2 inline-block text-ink-dim hover:text-ink"
                 >
-                  Open in {serviceByKey(f!.service)?.name} ↗
+                  Open in {serviceByKey(f.service)?.name} ↗
                 </a>
               </Panel>
             ))}
