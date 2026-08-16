@@ -12,8 +12,8 @@ import { Dot, SectionLabel } from "./primitives";
 interface Item {
   group: string;
   label: string;
-  hint?: string;
-  color?: string;
+  hint?: string | undefined;
+  color?: string | undefined;
   to: string;
 }
 
@@ -71,7 +71,7 @@ export function CommandPalette({
       }
       if (e.key === "Enter" && items[active]) {
         onClose();
-        navigate({ to: items[active].to });
+        navigate({ to: items[active]!.to });
       }
     }
     window.addEventListener("keydown", onKey);
