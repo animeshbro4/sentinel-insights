@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FindingsIndexRouteImport } from './routes/findings/index'
 import { Route as SituationsIndexRouteImport } from './routes/situations/index'
 import { Route as SituationsIdRouteImport } from './routes/situations/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FindingsIndexRoute = FindingsIndexRouteImport.update({
+  id: '/findings/',
+  path: '/findings/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SituationsIndexRoute = SituationsIndexRouteImport.update({
@@ -32,30 +38,34 @@ const SituationsIdRoute = SituationsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/situations/$id': typeof SituationsIdRoute
+  '/findings/': typeof FindingsIndexRoute
   '/situations/': typeof SituationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/situations/$id': typeof SituationsIdRoute
+  '/findings': typeof FindingsIndexRoute
   '/situations': typeof SituationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/situations/$id': typeof SituationsIdRoute
+  '/findings/': typeof FindingsIndexRoute
   '/situations/': typeof SituationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/situations/$id' | '/situations/'
+  fullPaths: '/' | '/situations/$id' | '/findings/' | '/situations/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/situations/$id' | '/situations'
-  id: '__root__' | '/' | '/situations/$id' | '/situations/'
+  to: '/' | '/situations/$id' | '/findings' | '/situations'
+  id: '__root__' | '/' | '/situations/$id' | '/findings/' | '/situations/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SituationsIdRoute: typeof SituationsIdRoute
+  FindingsIndexRoute: typeof FindingsIndexRoute
   SituationsIndexRoute: typeof SituationsIndexRoute
 }
 
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/findings/': {
+      id: '/findings/'
+      path: '/findings'
+      fullPath: '/findings/'
+      preLoaderRoute: typeof FindingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/situations/': {
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SituationsIdRoute: SituationsIdRoute,
+  FindingsIndexRoute: FindingsIndexRoute,
   SituationsIndexRoute: SituationsIndexRoute,
 }
 export const routeTree = rootRouteImport
